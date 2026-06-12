@@ -1,0 +1,20 @@
+{
+  "name": "derinlik-olcen-camera",
+  "version": "1.0.0",
+  "description": "MiDaS monocular depth estimation API",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "multer": "^2.1.1",
+    "onnxruntime-node": "^1.26.0",
+    "sharp": "^0.35.1"
+  }
+}
