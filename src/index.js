@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+const path = require('path');
 const express = require('express');
 const config = require('./config');
 const depthRouter = require('./routes/depth');
@@ -10,6 +11,11 @@ const app = express();
 const startTime = Date.now();
 
 app.use(express.json());
+app.use(express.static(path.join(__dirname, '..', 'public')));
+
+app.get('/', (_req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
+});
 
 app.get('/health', (_req, res) => {
   res.json({

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Derinlik Ölçer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Merriweather:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <header class="header">
+        <h1>Derinlik Ölçer</h1>
+        <p>
+          Tek bir fotoğraftan veya canlı kameradan monoküler derinlik haritası
+          üretin. MiDaS modeli ile yakın ve uzak bölgeleri görselleştirin.
+        </p>
+        <div id="status" class="status">
+          <span class="status-dot"></span> Bağlantı kontrol ediliyor…
+        </div>
+      </header>
+
+      <nav class="tabs" role="tablist">
+        <button
+          id="tabFile"
+          class="tab active"
+          type="button"
+          role="tab"
+          aria-selected="true"
+          data-panel="panelFile"
+        >
+          Dosya Yükle
+        </button>
+        <button
+          id="tabWebcam"
+          class="tab"
+          type="button"
+          role="tab"
+          aria-selected="false"
+          data-panel="panelWebcam"
+        >
+          Canlı Kamera
+        </button>
+      </nav>
+
+      <div id="panelFile" class="panel active">
+        <section class="upload-panel">
+          <div id="dropzone" class="dropzone">
+            <svg
+              class="dropzone-icon"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="1.5"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
+              />
+            </svg>
+            <strong>Görüntüyü sürükleyin veya tıklayın</strong>
+            <span>JPEG, PNG veya WebP · Maks. 10 MB</span>
+            <input id="fileInput" type="file" accept="image/jpeg,image/png,image/webp" />
+          </div>
+
+          <div class="actions">
+            <button id="analyzeBtn" class="btn" type="button" disabled>Analiz Et</button>
+            <button id="clearBtn" class="btn btn-secondary" type="button">Temizle</button>
+            <span id="fileName" class="file-name">Dosya seçilmedi</span>
+          </div>
+
+          <div id="loading" class="loading">
+            <span class="spinner"></span>
+            Derinlik haritası oluşturuluyor…
+          </div>
+
+          <div id="alert" class="alert"></div>
+        </section>
+
+        <section id="results" class="results">
+          <h2>Sonuçlar</h2>
+          <div class="grid">
+            <article class="card">
+              <div class="card-header">Orijinal Görüntü</div>
+              <div class="card-body">
+                <img id="originalImg" alt="Orijinal görüntü" />
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-header">Derinlik Haritası</div>
+              <div class="card-body">
+                <img id="depthImg" alt="Derinlik haritası" />
+              </div>
+            </article>
+          </div>
+          <dl class="meta">
+            <div>
+              <dt>İşlem süresi</dt>
+              <dd id="processingMs">—</dd>
+            </div>
+            <div>
+              <dt>Çözünürlük</dt>
+              <dd id="dimensions">—</dd>
+            </div>
+          </dl>
+        </section>
+      </div>
+
+      <div id="panelWebcam" class="panel">
+        <section class="upload-panel">
+          <p class="webcam-note">
+            Göreceli derinlik gösterilir.
+          </p>
+
+          <div class="actions">
+            <button id="startWebcamBtn" class="btn" type="button">Kamerayı Başlat</button>
+            <button id="stopWebcamBtn" class="btn btn-secondary" type="button" disabled>
+              Durdur
+            </button>
+            <span id="webcamStatus" class="file-name">Kamera kapalı</span>
+          </div>
+
+          <div id="webcamLoading" class="loading">
+            <span class="spinner"></span>
+            Derinlik haritası güncelleniyor…
+          </div>
+
+          <div id="webcamAlert" class="alert"></div>
+        </section>
+
+        <section id="webcamResults" class="results">
+          <h2>Canlı Görünüm</h2>
+          <div class="grid">
+            <article class="card">
+              <div class="card-header">Canlı Görüntü</div>
+              <div class="card-body">
+                <video id="webcamVideo" autoplay playsinline muted></video>
+                <p id="webcamPlaceholder" class="placeholder">
+                  Kamerayı başlatın
+                </p>
+              </div>
+            </article>
+            <article class="card">
+              <div class="card-header">Derinlik Haritası</div>
+              <div class="card-body card-body--depth">
+                <img id="webcamDepthImg" alt="Canlı derinlik haritası" />
+                <div id="webcamDepthSpinner" class="depth-spinner">
+                  <span class="spinner"></span>
+                </div>
+                <p id="depthPlaceholder" class="placeholder">Bekleniyor…</p>
+              </div>
+            </article>
+          </div>
+          <dl class="meta">
+            <div>
+              <dt>İşlem süresi</dt>
+              <dd id="webcamProcessingMs">—</dd>
+            </div>
+            <div>
+              <dt>Tahmini FPS</dt>
+              <dd id="webcamFps">—</dd>
+            </div>
+            <div>
+              <dt>Çözünürlük</dt>
+              <dd id="webcamDimensions">—</dd>
+            </div>
+          </dl>
+        </section>
+
+        <canvas id="captureCanvas" hidden></canvas>
+      </div>
+    </div>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
